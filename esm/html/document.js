@@ -1,12 +1,12 @@
-import {ELEMENT_NODE} from '../shared/constants.js';
-import {CUSTOM_ELEMENTS, END, NEXT} from '../shared/symbols.js';
-import {htmlClasses} from '../shared/register-html-class.js';
+import { ELEMENT_NODE } from '../shared/constants.js';
+import { htmlClasses } from '../shared/register-html-class.js';
+import { CUSTOM_ELEMENTS, END, NEXT } from '../shared/symbols.js';
 
-import {Document} from '../interface/document.js';
-import {NodeList} from '../interface/node-list.js';
-import {customElements} from '../interface/custom-element-registry.js';
+import { customElements } from '../interface/custom-element-registry.js';
+import { Document } from '../interface/document.js';
+import { NodeList } from '../interface/node-list.js';
 
-import {HTMLElement} from './element.js';
+import { HTMLElement } from './element.js';
 
 const createHTMLElement = (ownerDocument, builtin, localName, options) => {
   if (!builtin && htmlClasses.has(localName)) {
@@ -63,13 +63,15 @@ export class HTMLDocument extends Document {
    * @type HTMLBodyElement
    */
   get body() {
-    const {head} = this;
-    let {nextElementSibling} = head;
-    if (!nextElementSibling || nextElementSibling.tagName !== 'BODY') {
-      nextElementSibling = this.createElement('body');
-      head.after(nextElementSibling);
+    const existingBody = this.querySelector('body');
+    if (existingBody) {
+      return existingBody;
     }
-    return nextElementSibling;
+
+    const {head} = this;
+    const newBody = this.createElement('body');
+    head.after(newBody);
+    return newBody;
   }
 
   /**
